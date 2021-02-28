@@ -1,0 +1,32 @@
+/**************************************************
+	> File Name:  memo.go
+	> Author:     Leuckart
+	> Time:       2021-01-27 19:46
+**************************************************/
+
+package memo
+
+type Func func(key string) (interface{}, error)
+
+type result struct {
+	value interface{}
+	err   error
+}
+
+type Memo struct {
+	f     Func
+	cache map[string]result
+}
+
+func New(f Func) *Memo {
+	return &Memo{f: f, cache: make(map[string]result)}
+}
+
+func (memo *Memo) Get(key string) (interface{}, error) {
+	res, ok := memo.cache[key]
+	if !ok {
+		res.value, res.err = memo.f(key)
+		memo.cache[key] = res
+	}
+	return res.value, res.err
+}

@@ -1,0 +1,4 @@
+/home/leuckart/MyGitHub/HiHoCode/CMake/demo_03_static_library/build/CMakeFiles/rebuild_cache.dir
+/home/leuckart/MyGitHub/HiHoCode/CMake/demo_03_static_library/build/CMakeFiles/edit_cache.dir
+/home/leuckart/MyGitHub/HiHoCode/CMake/demo_03_static_library/build/CMakeFiles/new_static_library.dir
+/home/leuckart/MyGitHub/HiHoCode/CMake/demo_03_static_library/build/CMakeFiles/hello_static_library.dir

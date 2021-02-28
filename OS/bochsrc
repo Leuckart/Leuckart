@@ -1,0 +1,45 @@
+###############################################################
+# Configuration file for Bochs
+# -------------------------------------------------------------
+# 编译步骤
+# nasm boot.asm -o boot.bin
+# dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc
+# -------------------------------------------------------------
+# 调试步骤
+# b address     在某物理地址上设置断点 (b 0x7c00)
+# c             继续执行, 直到遇到断点
+# s             单步执行
+# r             查看寄存器信息
+# sreg          查看寄存器信息
+# creg          查看寄存器信息
+# xp /nuf addr  查看内存物理地址内容 (xp /10bx 0x100000)
+# x /nuf addr   查看线性地址内容 (x /40wd 0x90000)
+# u start end   反汇编一段内存 (u 0x100000 0x100010)
+# -------------------------------------------------------------
+# n     代表显示单元个数
+# u     代表显示单元大小 (b-Byte, h-Word, w-DWord, g-QWord)
+# f     代表显示格式 (x-十六进制, d-十进制, t-二进制, c-字符)
+###############################################################
+
+
+# 设置虚拟平台的可用物理内存容量, 以 MB 为单位
+megs: 32
+
+# filename of ROM images
+romimage: file=/usr/share/bochs/BIOS-bochs-latest
+vgaromimage: file=/usr/share/vgabios/vgabios.bin
+
+# 设置插入软盘的类型为容量 1.44MB 的软盘, 软盘镜像名为 a.img, 状态是已插入, 写保护开关置为关闭状态
+floppya: type=1_44, 1_44="a.img", status=inserted, write_protected=0
+
+# 设置 BIOS 的启动项为软盘启动
+boot: floppy
+
+# where do we send log messages?
+log: bochsout.txt
+
+# disable the mouse
+mouse: enabled=0
+
+# enable key mapping, using US layout as default.
+keyboard:  keymap=/usr/share/bochs/keymaps/x11-pc-us.map

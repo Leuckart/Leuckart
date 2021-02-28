@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnew_static_library.a  CMakeFiles/new_static_library.dir/src/hello.cpp.o
+/usr/bin/ranlib libnew_static_library.a
