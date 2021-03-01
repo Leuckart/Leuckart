@@ -54,6 +54,15 @@ func (x byYear) Len() int           { return len(x) }
 func (x byYear) Less(i, j int) bool { return x[i].Year < x[j].Year }
 func (x byYear) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 
+type customSort struct {
+	t    []*Track
+	less func(x, y *Track) bool
+}
+
+func (x customSort) Len() int           { return len(x.t) }
+func (x customSort) Less(i, j int) bool { return x.less(x.t[i], x.t[j]) }
+func (x customSort) Swap(i, j int)      { x.t[i], x.t[j] = x.t[j], x.t[i] }
+
 func main() {
 	var tracks = []*Track{
 		{"Go", "Delilah", "From the Roots Up", 2012, duration("3m38s")},
@@ -62,7 +71,7 @@ func main() {
 		{"Ready 2 Go", "Martin Solveig", "Smash", 2011, duration("4m24s")},
 	}
 
-	fmt.Println("byArtist:")
+	fmt.Println("\nbyArtist:")
 	sort.Sort(byArtist(tracks))
 	printTracks(tracks)
 
@@ -90,22 +99,13 @@ func main() {
 	printTracks(tracks)
 }
 
-type customSort struct {
-	t    []*Track
-	less func(x, y *Track) bool
-}
-
-func (x customSort) Len() int           { return len(x.t) }
-func (x customSort) Less(i, j int) bool { return x.less(x.t[i], x.t[j]) }
-func (x customSort) Swap(i, j int)      { x.t[i], x.t[j] = x.t[j], x.t[i] }
-
 func init() {
 	values := []int{3, 1, 4, 1}
-	fmt.Println(sort.IntsAreSorted(values))
+	fmt.Println(values, sort.IntsAreSorted(values))
+
 	sort.Ints(values)
-	fmt.Println(values)
-	fmt.Println(sort.IntsAreSorted(values))
+	fmt.Println(values, sort.IntsAreSorted(values))
+
 	sort.Sort(sort.Reverse(sort.IntSlice(values)))
-	fmt.Println(values)
-	fmt.Println(sort.IntsAreSorted(values))
+	fmt.Println(values, sort.IntsAreSorted(values))
 }

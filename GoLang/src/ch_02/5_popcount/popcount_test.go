@@ -9,7 +9,7 @@ package popcount_test
 import (
 	"testing"
 
-	"ch_02/05_popcount"
+	"ch_02/5_popcount"
 )
 
 func BitCount(x uint64) int {
