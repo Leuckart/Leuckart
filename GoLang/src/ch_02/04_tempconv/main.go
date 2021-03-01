@@ -11,7 +11,7 @@ import (
 	"os"
 	"strconv"
 
-	"ch_02/4_tempconv/tempconv"
+	"./tempconv"
 )
 
 func main() {

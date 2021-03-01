@@ -4,12 +4,10 @@
 	> Time:       2021-01-17 03:52
 **************************************************/
 
-package popcount_test
+package popcount
 
 import (
 	"testing"
-
-	"ch_02/5_popcount"
 )
 
 func BitCount(x uint64) int {
@@ -43,7 +41,7 @@ func PopCountByShifting(x uint64) int {
 
 func BenchmarkPopCount(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		popcount.PopCount(0x1234567890ABCDEF)
+		PopCount(0x1234567890ABCDEF)
 	}
 }
 
