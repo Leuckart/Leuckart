@@ -22,14 +22,7 @@ type Track struct {
 	Length time.Duration
 }
 
-var tracks = []*Track{
-	{"Go", "Delilah", "From the Roots Up", 2012, length("3m38s")},
-	{"Go", "Moby", "Moby", 1992, length("3m37s")},
-	{"Go Ahead", "Alicia Keys", "As I Am", 2007, length("4m36s")},
-	{"Ready 2 Go", "Martin Solveig", "Smash", 2011, length("4m24s")},
-}
-
-func length(s string) time.Duration {
+func duration(s string) time.Duration {
 	d, err := time.ParseDuration(s)
 	if err != nil {
 		panic(s)
@@ -38,10 +31,11 @@ func length(s string) time.Duration {
 }
 
 func printTracks(tracks []*Track) {
-	const format = "%v\t%v\t%v\t%v\t%v\t\n"
+	const format = "%v\t%v\t%v\t%v\t%v\n"
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
 	fmt.Fprintf(tw, format, "Title", "Artist", "Album", "Year", "Length")
 	fmt.Fprintf(tw, format, "-----", "------", "-----", "----", "------")
+
 	for _, t := range tracks {
 		fmt.Fprintf(tw, format, t.Title, t.Artist, t.Album, t.Year, t.Length)
 	}
@@ -61,6 +55,13 @@ func (x byYear) Less(i, j int) bool { return x[i].Year < x[j].Year }
 func (x byYear) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 
 func main() {
+	var tracks = []*Track{
+		{"Go", "Delilah", "From the Roots Up", 2012, duration("3m38s")},
+		{"Go", "Moby", "Moby", 1992, duration("3m37s")},
+		{"Go Ahead", "Alicia Keys", "As I Am", 2007, duration("4m36s")},
+		{"Ready 2 Go", "Martin Solveig", "Smash", 2011, duration("4m24s")},
+	}
+
 	fmt.Println("byArtist:")
 	sort.Sort(byArtist(tracks))
 	printTracks(tracks)
