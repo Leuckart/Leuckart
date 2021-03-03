@@ -7,12 +7,13 @@
 package main
 
 import (
-	"./eval"
 	"fmt"
 	"io"
 	"log"
 	"math"
 	"net/http"
+
+	"ch_07/07_eval"
 )
 
 const (
@@ -26,6 +27,8 @@ const (
 
 var sin30, cos30 = math.Sin(angle), math.Cos(angle)
 
+// ./surface
+// ../../ch_01/05_fetch/fetch http://localhost:8000/plot?expr=pow\(2,sin\(y\)\)*pow\(2,sin\(x\)\)/12 > pic.svg
 func main() {
 	http.HandleFunc("/plot", plot)
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
@@ -34,7 +37,6 @@ func main() {
 func corner(f func(x, y float64) float64, i, j int) (float64, float64) {
 	x := xyrange * (float64(i)/cells - 0.5)
 	y := xyrange * (float64(j)/cells - 0.5)
-
 	z := f(x, y)
 
 	sx := width/2 + (x-y)*cos30*xyscale
