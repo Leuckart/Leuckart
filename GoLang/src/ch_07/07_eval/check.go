@@ -37,6 +37,8 @@ func (b binary) Check(vars map[Var]bool) error {
 	return b.y.Check(vars)
 }
 
+var numParams = map[string]int{"pow": 2, "sin": 1, "sqrt": 1}
+
 func (c call) Check(vars map[Var]bool) error {
 	arity, ok := numParams[c.fn]
 	if !ok {
@@ -52,5 +54,3 @@ func (c call) Check(vars map[Var]bool) error {
 	}
 	return nil
 }
-
-var numParams = map[string]int{"pow": 2, "sin": 1, "sqrt": 1}
