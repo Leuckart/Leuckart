@@ -14,6 +14,20 @@ import (
 	"strings"
 )
 
+func containsAll(x, y []string) bool {
+	for len(y) <= len(x) {
+		if len(y) == 0 {
+			return true
+		}
+		if x[0] == y[0] {
+			y = y[1:]
+		}
+		x = x[1:]
+	}
+	return false
+}
+
+// ../../ch_01/05_fetch/fetch http://www.w3.org/TR/2006/REC-xml11-20060816 | ./xmlselect div div h2
 func main() {
 	dec := xml.NewDecoder(os.Stdin)
 	var stack []string
@@ -37,17 +51,4 @@ func main() {
 
 		}
 	}
-}
-
-func containsAll(x, y []string) bool {
-	for len(y) <= len(x) {
-		if len(y) == 0 {
-			return true
-		}
-		if x[0] == y[0] {
-			y = y[1:]
-		}
-		x = x[1:]
-	}
-	return false
 }
