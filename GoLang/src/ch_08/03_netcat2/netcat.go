@@ -19,6 +19,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer conn.Close()
+
 	go mustCopy(os.Stdout, conn)
 	mustCopy(conn, os.Stdin)
 }

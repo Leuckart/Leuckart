@@ -24,21 +24,23 @@ func echo(c net.Conn, shout string, delay time.Duration) {
 }
 
 func handleConn(c net.Conn) {
+	defer c.Close()
 	input := bufio.NewScanner(c)
 	for input.Scan() {
 		echo(c, input.Text(), 1*time.Second)
 	}
-	c.Close()
 }
 
+// ./reverb
+// ../03_netcat2/netcat, Hello!
 func main() {
-	l, err := net.Listen("tcp", "localhost:8000")
+	listener, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for {
-		conn, err := l.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
 			log.Print(err)
 			continue

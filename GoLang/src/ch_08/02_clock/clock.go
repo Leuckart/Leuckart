@@ -25,7 +25,7 @@ func handleConn(c net.Conn) {
 }
 
 // ./clock
-// nc localhost 8000
+// 'nc localhost 8000' or '../03_netcat1/netcat'
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
