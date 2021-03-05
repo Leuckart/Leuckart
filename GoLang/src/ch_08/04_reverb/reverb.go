@@ -1,7 +1,7 @@
 /**************************************************
 	> File Name:  reverb.go
 	> Author:     Leuckart
-	> Time:       2021-01-27 00:53
+	> Time:       2021-01-27 00:58
 **************************************************/
 
 package main
@@ -27,12 +27,12 @@ func handleConn(c net.Conn) {
 	defer c.Close()
 	input := bufio.NewScanner(c)
 	for input.Scan() {
-		echo(c, input.Text(), 1*time.Second)
+		go echo(c, input.Text(), 1*time.Second)
 	}
 }
 
 // ./reverb
-// ../03_netcat2/netcat, Hello!
+// ../03_netcat2/netcat, Hello & Bye
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
