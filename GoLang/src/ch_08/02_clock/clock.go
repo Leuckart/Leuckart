@@ -16,7 +16,7 @@ import (
 func handleConn(c net.Conn) {
 	defer c.Close()
 	for {
-		_, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
+		_, err := io.WriteString(c, time.Now().Format("2006-01-02 15:04:05\n"))
 		if err != nil {
 			return
 		}
@@ -24,6 +24,8 @@ func handleConn(c net.Conn) {
 	}
 }
 
+// ./clock
+// nc localhost 8000
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
