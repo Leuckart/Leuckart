@@ -1,7 +1,7 @@
 /**************************************************
 	> File Name:  pipeline.go
 	> Author:     Leuckart
-	> Time:       2021-01-27 00:41
+	> Time:       2021-01-27 00:47
 **************************************************/
 
 package main
@@ -13,19 +13,20 @@ func main() {
 	squares := make(chan int)
 
 	go func() {
-		for x := 0; ; x++ {
+		for x := 0; x <= 10; x++ {
 			naturals <- x
 		}
+		close(naturals)
 	}()
 
 	go func() {
-		for {
-			x := <-naturals
+		for x := range naturals {
 			squares <- x * x
 		}
+		close(squares)
 	}()
 
-	for {
-		fmt.Println(<-squares)
+	for x := range squares {
+		fmt.Println(x)
 	}
 }
