@@ -3,16 +3,34 @@
 	> Author:     Leuckart
 	> Time:       2021-01-26 01:33
 **************************************************/
-package cake_test
+
+// go test -bench=.
+package cake
 
 import (
-	"./"
 	"testing"
 	"time"
+	"fmt"
 )
 
-var defaults = cake.Shop{
-	Verbose:      testing.Verbose(),
+// https://github.com/golang/go/issues/31859
+func init()  {
+	testing.Init()
+}
+
+var _ = func() bool {
+	fmt.Println("1")
+	testing.Init()
+	fmt.Println("2")
+	fmt.Println(testing.Verbose())
+	return true
+}()
+
+
+
+var defaults = Shop{
+	Verbose: testing.Verbose(),
+	//Verbose:      false,
 	Cakes:        20,
 	BakeTime:     10 * time.Millisecond,
 	NumIcers:     1,
@@ -22,7 +40,7 @@ var defaults = cake.Shop{
 
 func Benchmark(b *testing.B) {
 	cakeshop := defaults
-	cakeshop.Work(b.N)
+	cakeshop.Work(b.N) // 224ms
 }
 
 func BenchmarkBuffers(b *testing.B) {

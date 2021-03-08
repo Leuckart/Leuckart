@@ -63,6 +63,7 @@ func (s *Shop) inscriber(iced <-chan cake) {
 	}
 }
 
+// Work runs the simulation 'runs' times.
 func (s *Shop) Work(runs int) {
 	for run := 0; run < runs; run++ {
 		baked := make(chan cake, s.BakeBuf)
@@ -75,6 +76,8 @@ func (s *Shop) Work(runs int) {
 	}
 }
 
+// work blocks the calling goroutine for a period of time that is normally
+// distributed around d with a standard deviation of stddev.
 func work(d, stddev time.Duration) {
 	delay := d + time.Duration(rand.NormFloat64()*float64(stddev))
 	time.Sleep(delay)
