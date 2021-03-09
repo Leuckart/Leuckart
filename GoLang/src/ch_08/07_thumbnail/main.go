@@ -7,13 +7,15 @@
 package main
 
 import (
-	"./thumbnail"
 	"bufio"
 	"fmt"
 	"log"
 	"os"
+
+	"ch_08/07_thumbnail/thumbnail"
 )
 
+// entering: ../../../doc/fiveyears.jpg
 func main() {
 	input := bufio.NewScanner(os.Stdin)
 	for input.Scan() {

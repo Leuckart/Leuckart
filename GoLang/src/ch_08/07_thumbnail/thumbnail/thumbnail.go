@@ -72,4 +72,21 @@ func ImageFile(infile string) (string, error) {
 	ext := filepath.Ext(infile)
 	outfile := strings.TrimSuffix(infile, ext) + ".thumb" + ext
 	return outfile, ImageFile2(outfile, infile)
+
+	in, err := os.Open(infile)
+	if err != nil {
+		return outfile, err
+	}
+	defer in.Close()
+
+	out, err := os.Create(outfile)
+	if err != nil {
+		return outfile, err
+	}
+
+	if err := ImageStream(out, in); err != nil {
+		out.Close()
+		return outfile, fmt.Errorf("scaling %s to %s: %s", infile, outfile, err)
+	}
+	return outfile, out.Close()
 }
