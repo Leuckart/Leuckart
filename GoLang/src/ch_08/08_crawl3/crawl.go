@@ -25,10 +25,9 @@ func crawl(url string) []string {
 
 func main() {
 	worklist := make(chan []string)
-	unseenLinks := make(chan string)
-
 	go func() { worklist <- os.Args[1:] }()
 
+	unseenLinks := make(chan string)
 	for i := 0; i < 20; i++ {
 		go func() {
 			for link := range unseenLinks {
