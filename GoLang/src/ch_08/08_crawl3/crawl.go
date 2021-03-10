@@ -23,6 +23,7 @@ func crawl(url string) []string {
 	return list
 }
 
+// ./crawl https://gopl.io/
 func main() {
 	worklist := make(chan []string)
 	go func() { worklist <- os.Args[1:] }()
