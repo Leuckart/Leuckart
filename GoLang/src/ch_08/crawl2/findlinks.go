@@ -7,10 +7,11 @@
 package main
 
 import (
-	"./links"
 	"fmt"
 	"log"
 	"os"
+
+	"ch_05/06_links"
 )
 
 var tokens = make(chan struct{}, 20)
