@@ -17,7 +17,6 @@ import (
 
 // $ ./thumbnail
 // fiveyears.jpg
-// ^D
 func main() {
 	input := bufio.NewScanner(os.Stdin)
 	for input.Scan() {

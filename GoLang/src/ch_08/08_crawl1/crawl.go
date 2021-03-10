@@ -1,7 +1,7 @@
 /**************************************************
-	> File Name:  findlinks.go
+	> File Name:  crawl.go
 	> Author:     Leuckart
-	> Time:       2021-01-26 22:11
+	> Time:       2021-01-26 21:50
 **************************************************/
 
 package main
@@ -23,27 +23,19 @@ func crawl(url string) []string {
 	return list
 }
 
+// ./crawl https://gopl.io/
 func main() {
 	worklist := make(chan []string)
-	unseenLinks := make(chan string)
-
 	go func() { worklist <- os.Args[1:] }()
-
-	for i := 0; i < 20; i++ {
-		go func() {
-			for link := range unseenLinks {
-				foundLinks := crawl(link)
-				go func() { worklist <- foundLinks }()
-			}
-		}()
-	}
 
 	seen := make(map[string]bool)
 	for list := range worklist {
 		for _, link := range list {
 			if !seen[link] {
 				seen[link] = true
-				unseenLinks <- link
+				go func(link string) {
+					worklist <- crawl(link)
+				}(link)
 			}
 		}
 	}
