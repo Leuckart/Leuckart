@@ -12,7 +12,7 @@ import (
 	"sync"
 )
 
-func makeThumbnails1(filenames []string) (thumbfiles []string, err error) {
+func makeThumbnailsSlice(filenames []string) (thumbfiles []string, err error) {
 	type item struct {
 		thumbfile string
 		err       error
@@ -38,7 +38,7 @@ func makeThumbnails1(filenames []string) (thumbfiles []string, err error) {
 	return thumbfiles, nil
 }
 
-func makeThumbnails2(filenames <-chan string) int64 {
+func makeThumbnailsChan(filenames <-chan string) int64 {
 	sizes := make(chan int64)
 	var wg sync.WaitGroup
 	for f := range filenames {

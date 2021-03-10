@@ -15,7 +15,9 @@ import (
 	"ch_08/07_thumbnail/thumbnail"
 )
 
-// entering: ../../../doc/fiveyears.jpg
+// $ ./thumbnail
+// fiveyears.jpg
+// ^D
 func main() {
 	input := bufio.NewScanner(os.Stdin)
 	for input.Scan() {
