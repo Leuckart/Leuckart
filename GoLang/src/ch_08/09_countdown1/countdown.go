@@ -11,9 +11,7 @@ import (
 	"time"
 )
 
-func launch() {
-	fmt.Println("Lift off!")
-}
+func launch() { fmt.Println("Lift off!") }
 
 func main() {
 	fmt.Println("Commencing countdown.")

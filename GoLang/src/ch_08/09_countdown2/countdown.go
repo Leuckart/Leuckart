@@ -12,13 +12,9 @@ import (
 	"time"
 )
 
-func launch() {
-	fmt.Println("Lift off!")
-}
+func launch() { fmt.Println("Lift off!") }
 
-func aborts() {
-	fmt.Println("Launch aborted!")
-}
+func aborts() { fmt.Println("Launch aborted!") }
 
 func main() {
 	abort := make(chan struct{})
