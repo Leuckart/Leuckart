@@ -49,6 +49,7 @@ func printDiskUsage(nfiles, nbytes int64) {
 
 var verbose = flag.Bool("v", false, "show verbose progress messages")
 
+// ./du -v .
 func main() {
 	flag.Parse()
 	roots := flag.Args()
@@ -62,7 +63,7 @@ func main() {
 		n.Add(1)
 		go walkDir(root, fileSizes, &n)
 	}
-	go func() {
+	go func() { // 负责在 n 归零后关闭 fileSize, 使主 goroutine 阻塞中止
 		n.Wait()
 		close(fileSizes)
 	}()

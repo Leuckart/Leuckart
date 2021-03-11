@@ -14,6 +14,30 @@ import (
 	"time"
 )
 
+var sema = make(chan struct{}, 20)
+
+func dirents(dir string) []os.FileInfo {
+	select {
+	case sema <- struct{}{}:
+	case <-done:
+		return nil
+	}
+	defer func() { <-sema }()
+
+	f, err := os.Open(dir)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "du: %v\n", err)
+		return nil
+	}
+	defer f.Close()
+
+	entries, err := f.Readdir(0)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "du: %v\n", err)
+	}
+	return entries
+}
+
 var done = make(chan struct{})
 
 func cancelled() bool {
@@ -23,6 +47,27 @@ func cancelled() bool {
 	default:
 		return false
 	}
+}
+
+func walkDir(dir string, fileSizes chan<- int64, n *sync.WaitGroup) {
+	defer n.Done()
+	if cancelled() {
+		return
+	}
+
+	for _, entry := range dirents(dir) {
+		if entry.IsDir() {
+			n.Add(1)
+			subdir := filepath.Join(dir, entry.Name())
+			go walkDir(subdir, fileSizes, n)
+		} else {
+			fileSizes <- entry.Size()
+		}
+	}
+}
+
+func printDiskUsage(nfiles, nbytes int64) {
+	fmt.Printf("%d files  %.2f MB\n", nfiles, float64(nbytes)/1e6)
 }
 
 func main() {
@@ -40,7 +85,7 @@ func main() {
 	var n sync.WaitGroup
 	for _, root := range roots {
 		n.Add(1)
-		go walkDir(root, &n, fileSizes)
+		go walkDir(root, fileSizes, &n)
 	}
 	go func() {
 		n.Wait()
@@ -68,49 +113,4 @@ loop:
 		}
 	}
 	printDiskUsage(nfiles, nbytes)
-}
-
-func printDiskUsage(nfiles, nbytes int64) {
-	fmt.Printf("%d files  %.2f GB\n", nfiles, float64(nbytes)/1e9)
-}
-
-func walkDir(dir string, n *sync.WaitGroup, fileSizes chan<- int64) {
-	defer n.Done()
-	if cancelled() {
-		return
-	}
-
-	for _, entry := range dirents(dir) {
-		if entry.IsDir() {
-			n.Add(1)
-			subdir := filepath.Join(dir, entry.Name())
-			go walkDir(subdir, n, fileSizes)
-		} else {
-			fileSizes <- entry.Size()
-		}
-	}
-}
-
-var sema = make(chan struct{}, 20)
-
-func dirents(dir string) []os.FileInfo {
-	select {
-	case sema <- struct{}{}:
-	case <-done:
-		return nil
-	}
-	defer func() { <-sema }()
-
-	f, err := os.Open(dir)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "du: %v\n", err)
-		return nil
-	}
-	defer f.Close()
-
-	entries, err := f.Readdir(0)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "du: %v\n", err)
-	}
-	return entries
 }
