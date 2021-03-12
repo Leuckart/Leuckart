@@ -14,6 +14,8 @@ import (
 	"time"
 )
 
+var done = make(chan struct{}) // 当通道关闭且已取完被发送的值后, 后续的接收操作将立刻返回, 得到零值
+
 var sema = make(chan struct{}, 20)
 
 func dirents(dir string) []os.FileInfo {
@@ -37,8 +39,6 @@ func dirents(dir string) []os.FileInfo {
 	}
 	return entries
 }
-
-var done = make(chan struct{})
 
 func cancelled() bool {
 	select {

@@ -25,16 +25,22 @@ func broadcaster() {
 	clients := make(map[client]bool)
 	for {
 		select {
-		case msg := <-message:
+		case msg := <-message: // 监听 messages 的消息, 并广播给所有客户
 			for cli := range clients {
 				cli <- msg
 			}
-		case cli := <-entering:
+		case cli := <-entering: // 更新 clients 集合
 			clients[cli] = true
-		case cli := <-leaving:
+		case cli := <-leaving: // 更新 clients 集合, 并关闭客户对外发送消息的通道
 			delete(clients, cli)
 			close(cli)
 		}
+	}
+}
+
+func clientWriter(conn net.Conn, ch <-chan string) {
+	for msg := range ch {
+		fmt.Fprintln(conn, msg)
 	}
 }
 
@@ -57,12 +63,9 @@ func handleConn(conn net.Conn) {
 	conn.Close()
 }
 
-func clientWriter(conn net.Conn, ch <-chan string) {
-	for msg := range ch {
-		fmt.Fprintln(conn, msg)
-	}
-}
-
+// $ ./chat &
+// $ ../03_netcat3/netcat		$ ../03_netcat3/netcat
+// Hi!							$ Hi yourself!
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
